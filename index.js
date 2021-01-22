@@ -12,7 +12,7 @@ function start(opts){
   var noRestart = function() {};
   var filter = through.obj(function(obj, enc, cb) {
     const out = outStreams[obj.image] || (outStreams[obj.image] = new CloudWatchLogs({...opts, logStreamName: obj.image}));
-    if (obj.line) {
+    if (obj.line.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '').trim()) {
       out.write(obj.line);
       console.log(`${obj.image} | ${obj.line}`);
     }
